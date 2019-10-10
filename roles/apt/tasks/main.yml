@@ -1,0 +1,28 @@
+---
+
+- name: Only run "update_cache=yes" if the last one is more than 3600 seconds ago
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install Aptitude
+  apt:
+    name: aptitude
+    state: present
+
+- name: Enforce IPv4 connections
+  lineinfile:
+    path: /etc/apt/apt.conf.d/99force-ipv4
+    regexp: '^Acquire::ForceIPv4 "true";'
+    line: 'Acquire::ForceIPv4 "true";'
+    create: yes
+    state: present
+
+- name: Pass options to dpkg on run
+  apt:
+    upgrade: full
+    dpkg_options: 'force-confold,force-confdef'
+
+- name: Reboot and wait
+  reboot:
+    reboot_timeout: 3600

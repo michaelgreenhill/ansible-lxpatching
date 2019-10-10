@@ -1,0 +1,7 @@
+---
+
+- name: Fetch and install Linux updates
+  hosts: all
+  roles:
+  - apt
+  become: yes
